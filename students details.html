@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registered Students</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-4">
+  <h3 class="mb-4">Registered Students</h3>
+
+  <a href="/" class="btn btn-secondary mb-3"> Back </a>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Roll</th>
+          <th>Class</th>
+          <th>Section</th>
+          <th>Phone</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tbody>
+         {% for s in students %}
+         <tr>
+           <td>{{ s[0] }}</td>
+           <td contenteditable="true" id="name-{{ s[0] }}">{{ s[1] }}</td>
+           <td contenteditable="true" id="roll-{{ s[0] }}">{{ s[2] }}</td>
+           <td contenteditable="true" id="class-{{ s[0] }}">{{ s[3] }}</td>
+           <td contenteditable="true" id="section-{{ s[0] }}">{{ s[4] }}</td>
+           <td contenteditable="true" id="phone-{{ s[0] }}">{{ s[5] }}</td>
+           <td>{{ s[6] }}</td>
+           <td>
+           <button class="btn btn-sm btn-success" onclick="updateStudent({{ s[0] }})">✏ Save</button>
+           <button class="btn btn-sm btn-danger" onclick="deleteStudent({{ s[0] }})">🗑 Delete</button>
+           </td>
+         </tr>
+           {% endfor %}
+
+        </tbody>
+    </table>
+  </div>
+
+</div>
+<script>
+async function deleteStudent(id) {
+  if (!confirm("Are you sure you want to delete this student?")) return;
+
+  const res = await fetch(`/students/${id}`, {
+    method: "DELETE"
+  });
+
+  if (res.ok) {
+    location.reload();
+  }
+}
+
+async function updateStudent(id) {
+  const data = {
+    name: document.getElementById(`name-${id}`).innerText,
+    rollno: document.getElementById(`roll-${id}`).innerText,
+    class: document.getElementById(`class-${id}`).innerText,
+    section: document.getElementById(`section-${id}`).innerText,
+    phoneno: document.getElementById(`phone-${id}`).innerText
+  };
+
+  const res = await fetch(`/students/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+
+  if (res.ok) {
+    alert("Student updated successfully");
+  } else {
+    alert(result.error || "Update failed");
+  }
+}
+</script>
+</body>
+</html>
