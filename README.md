@@ -100,7 +100,7 @@ Face-Recognition-Attendance-System/
 └── README.md
 ▶️ How to Run the Project
 1. Clone the Repository
-git clone https://github.com/your-username/face-recognition-attendance-system.git
+git clone https://github.com/bhumikaugale13/face-recognition-attendance-system.git
 2. Install Required Libraries
 pip install flask opencv-python face-recognition pandas numpy
 3. Run the Application
